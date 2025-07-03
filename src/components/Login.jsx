@@ -8,32 +8,58 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Create default users if no users exist
+    const defaultUsers = [
+      { id: 1, username: "admin@gmail.com", password: "aaaaaa", role: "admin", parentId: null },
+      { id: 2, username: "teacher@gmail.com", password: "aaaaaa", role: "teacher", parentId: null },
+      { id: 3, username: "student@gmail.com", password: "aaaaaa", role: "student", parentId: null }
+    ];
+
+    const existingUsers = getUsers();
+
+    if (!existingUsers || existingUsers.length === 0) {
+      defaultUsers.forEach(user => createUser(user));
+    }
+  }, []);
+
+  useEffect(() => {
     if (getSession()) {
       navigate("/dashboard");
     }
   }, [navigate]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    let updatedForm = { ...form, [name]: value };
+
+    // Auto-set role based on email for default users
+    if (name === "username") {
+      if (value === "admin@gmail.com") updatedForm.role = "admin";
+      else if (value === "teacher@gmail.com") updatedForm.role = "teacher";
+      else if (value === "student@gmail.com") updatedForm.role = "student";
+    }
+
+    setForm(updatedForm);
   };
 
   const handleLogin = () => {
     const user = getUsers().find(
-      u => u.username === form.username && u.password === form.password
+      u => u.username === form.username && u.password === form.password && u.role === form.role
     );
 
     if (user) {
       setSession(user);
       navigate("/dashboard");
     } else {
-      alert("Invalid credentials");
+      alert("Invalid credentials or role mismatch");
     }
   };
 
   const handleSignup = () => {
     const users = getUsers();
-    if (users.find(u => u.username === form.username)) {
-      alert("User already exists");
+    if (users.find(u => u.username === form.username && u.role === form.role)) {
+      alert("User already exists with this role");
       return;
     }
     const newUser = {
@@ -71,19 +97,16 @@ export default function Login() {
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
-          {isSignup && (
-            <select
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
-              <option value="student">Student</option>
-              <option value="teacher">Teacher</option>
-              <option value="admin">Admin</option>
-              <option value="parent">Parent</option>
-            </select>
-          )}
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
 
           <button
             onClick={isSignup ? handleSignup : handleLogin}
