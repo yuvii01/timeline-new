@@ -1,6 +1,92 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUsers, createUser, setSession, getSession } from "../api/users";
+import styled from "styled-components";
+
+const Container = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+`;
+
+const Card = styled.div`
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const Title = styled.h2`
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1f2937;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px #bfdbfe;
+  }
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px #bfdbfe;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 0.75rem;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: #2563eb;
+  }
+`;
+
+const SwitchText = styled.p`
+  text-align: center;
+  color: #6b7280;
+  font-size: 1rem;
+`;
+
+const SwitchLink = styled.span`
+  color: #3b82f6;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 0.25rem;
+  &:hover {
+    color: #2563eb;
+  }
+`;
 
 export default function Login() {
   const [isSignup, setIsSignup] = useState(false);
@@ -73,59 +159,40 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-gray-800">
-          {isSignup ? "Create an Account" : "Login to Your Account"}
-        </h2>
-
-        <div className="space-y-4">
-          <input
+    <Container>
+      <Card>
+        <Title>{isSignup ? "Create an Account" : "Login to Your Account"}</Title>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <Input
             name="username"
             placeholder="Username"
             value={form.username}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-
-          <input
+          <Input
             name="password"
             type="password"
             placeholder="Password"
             value={form.password}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
-
-          <select
+          <Select
             name="role"
             value={form.role}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
             <option value="admin">Admin</option>
-          </select>
-
-          <button
-            onClick={isSignup ? handleSignup : handleLogin}
-            className="w-full py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition"
-          >
+          </Select>
+          <Button onClick={isSignup ? handleSignup : handleLogin}>
             {isSignup ? "Sign Up" : "Login"}
-          </button>
+          </Button>
         </div>
-
-        <p className="text-center text-gray-600">
-          {isSignup ? "Already have an account?" : "Don't have an account?"}{" "}
-          <span
-            onClick={() => setIsSignup(!isSignup)}
-            className="text-blue-500 hover:underline cursor-pointer"
-          >
+        <SwitchText>
+          {isSignup ? "Already have an account?" : "Don't have an account?"}
+          <SwitchLink onClick={() => setIsSignup(!isSignup)}>
             {isSignup ? "Login" : "Sign up"}
-          </span>
-        </p>
-      </div>
-    </div>
-  );
-}
+          </SwitchLink>
+        </SwitchText>
+      </Card>
