@@ -5,7 +5,7 @@ import styled from "styled-components";
 import jsPDF from "jspdf";
 import StudentAttendanceView from "./student/StudentAttendenceView";
 import ReportCardViewer from "./student/ReportCardViewer";
-import TimetableViewer from "./student/TimetableViewer";
+import TimetableViewer from "./student/TimeTableViewer";
 import AdmissionForm from "./student/AdmissionForm";
 
 const Section = styled.div`

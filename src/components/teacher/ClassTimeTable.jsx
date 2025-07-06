@@ -10,7 +10,6 @@ import TeacherAttendance from "./TeacherAttendence";
 // Styled Components
 const Container = styled.div`
   padding: 2rem;
-  margin-left: 240px;
   background: #f4f7fa;
   min-height: 100vh;
   font-family: "Segoe UI", sans-serif;
@@ -147,79 +146,12 @@ export default function ClassTimetable() {
 
       
 
-      <Heading>School Weekly Timetable</Heading>
+      <Heading>Your Personalised Schedule </Heading>
 
     <Section>
-        <h3>Class Schedule</h3>
+        {/* <h3>Class Schedule</h3> */}
         <ClassScheduleManager />
       </Section>
-      
-
-      <Section>
-        <h3>Create Customized Timetable</h3>
-        <label>
-          <strong>Period Duration (minutes): </strong>
-          <Input
-            type="number"
-            value={duration}
-            onChange={(e) => setDuration(Number(e.target.value))}
-            min={15}
-            step={5}
-          />
-        </label>
-        <Button onClick={handleDownloadPDF}>Download Timetable as PDF</Button>
-      </Section>
-
-      <Section ref={ref}>
-        <TableWrapper>
-          <Table>
-            <thead>
-              <tr>
-                <Th>Time</Th>
-                {days.map((day) => (
-                  <Th key={day}>{day}</Th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {timeSlots.map((slot, idx) => {
-                const isBreak = (idx + 1) % 100 === 0;
-                return (
-                  <tr key={slot}>
-                    <Td>{slot}</Td>
-                    {days.map((day) => (
-                      <Td key={day + slot} isBreak={isBreak}>
-                        {isBreak ? (
-                          idx === 3 ? (
-                            <strong>Lunch Break</strong>
-                          ) : (
-                            "Break"
-                          )
-                        ) : (
-                          <Select
-                            value={(timetable[day]?.[slot]) || ""}
-                            onChange={(e) =>
-                              handleChange(day, slot, e.target.value)
-                            }
-                          >
-                            <option value="">--</option>
-                            {defaultSubjects.map((subj) => (
-                              <option key={subj} value={subj}>
-                                {subj}
-                              </option>
-                            ))}
-                          </Select>
-                        )}
-                      </Td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </TableWrapper>
-      </Section>
-
       
 
     </Container>

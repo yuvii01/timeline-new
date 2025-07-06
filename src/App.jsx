@@ -25,6 +25,8 @@ import FeeStatus from "./components/student/FeeStatus";
 import MyClassStu from "./components/student/MyClassStu";
 import TeacherAttendance from "./components/teacher/TeacherAttendence";
 import AttendanceModule from "./components/teacher/AttendenceTeacher";
+import PostCreate from "./components/PostCreate";
+import PostList from "./components/PostList";
 
 // Styled Components
 const AppContainer = styled.div`
@@ -149,9 +151,11 @@ function AppLayout() {
       {role === "teacher" && (
         <>
           <MenuItem onClick={() => navigate("/my-profile")}>My Profile</MenuItem>
+          <MenuItem onClick={() => navigate("/view-post")}>View Posts</MenuItem>
+          <MenuItem onClick={() => navigate("/create-post")}>Create Post</MenuItem>
           <MenuItem onClick={() => navigate("/my-classes")}>My Classes</MenuItem>
           <MenuItem onClick={() => navigate("/class-timetable")}>Schedule</MenuItem>
-          <MenuItem onClick={() => navigate("/exams-and-lesson-planner")}>Exams & Lessons</MenuItem>
+          <MenuItem onClick={() => navigate("/exams-lesson-planner")}>Exams & Lessons</MenuItem>
           <MenuItem onClick={() => navigate("/messages")}>Messages</MenuItem>
           <MenuItem onClick={() => navigate("/library")}>Digital Library</MenuItem>
           <MenuItem onClick={() => navigate("/bus-tracking")}>Bus Live Tracking</MenuItem>
@@ -184,7 +188,15 @@ function AppLayout() {
         <Routes>
           <Route
             path="/dashboard"
-            element={<Dashboard onLogout={handleLogout} />}
+            element={<Dashboard />}
+          />
+          <Route
+            path="/create-post"
+            element={<PostCreate onLogout={handleLogout} />}
+          />
+          <Route
+            path="/view-post"
+            element={<PostList currentUser={user}  />}
           />
           <Route
             path="/my-classes"
@@ -220,7 +232,7 @@ function AppLayout() {
             element={<AdminTimeTable onLogout={handleLogout} />}
           />
           <Route
-            path="/assignments"
+            path="/exams-lesson-planner"
             element={<ExamsLesson onLogout={handleLogout} /> }
           />
           <Route
@@ -248,7 +260,7 @@ function AppLayout() {
             path="/my-profile"
             element={<MyPosts user={user} onLogout={handleLogout} />}
           />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Content>
     </AppContainer>
@@ -270,10 +282,6 @@ export default function App() {
           path="/*"
           element={isLoggedIn ? <AppLayout /> : <Navigate to="/" />}
         />
-        {/* <Route
-          path="/my-classes"
-          element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />}
-        /> */}
       </Routes>
     </Router>
   );

@@ -236,6 +236,7 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     clearSession();
+    window.location.reload();
     navigate("/");
   };
 
@@ -327,12 +328,12 @@ export default function Dashboard() {
 
         
 
-        {(role === "admin" || role === "teacher") && (
+        {/* {(role === "admin" || role === "teacher") && (
           <Section>
             <h3>Create Post</h3>
             <PostCreate currentUser={user} />
           </Section>
-        )}
+        )} */}
 
         {role === "admin" && (
           <>
@@ -377,11 +378,6 @@ export default function Dashboard() {
           </>
         )}
 
-
-        <Section>
-          <h3>All Posts</h3>
-          <PostList currentUser={user} />
-        </Section>
       </Main>
     </Container>
   );

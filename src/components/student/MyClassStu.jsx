@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import TimetableViewer from "./TimetableViewer";
+import TimetableViewer from "./TimeTableViewer";
 import StudentAttendanceView from "./StudentAttendenceView";
 import ReportCardViewer from "./ReportCardViewer";
 import GradeSubmission from "../teacher/GradeSubmission";

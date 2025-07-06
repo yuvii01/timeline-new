@@ -83,20 +83,56 @@ const Button = styled.button`
   }
 `;
 
+// Helper to get YYYY-MM-DD string
+function getTodayStr(date = new Date()) {
+  return date.toISOString().slice(0, 10);
+}
+
 export default function TeacherAttendance() {
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [attendanceRecords, setAttendanceRecords] = useState(() => {
+    // Load from localStorage only once (on first render)
+    const saved = localStorage.getItem("teacherAttendanceRecords");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [statusToday, setStatusToday] = useState("");
 
   const teacher = {
     id: "t1",
     name: "John Doe",
-    profileImage: "https://via.placeholder.com/100",
+    profileImage: "https://assets.td.org/m/635d22569a4daa52/webimage-The-Teacher-Becomes-the-Learner.png",
     department: "Science",
     assignedClasses: ["Class A", "Class B"],
     totalLeaves: 12,
   };
 
-  const today = new Date().toLocaleDateString();
+  const today = getTodayStr();
+
+  // Save attendance to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("teacherAttendanceRecords", JSON.stringify(attendanceRecords));
+  }, [attendanceRecords]);
+
+  // --- MONGODB INTEGRATION (requires backend API) ---
+  // Uncomment and use these functions if you have a backend API set up
+
+  /*
+  // Fetch attendance records from MongoDB on mount
+  useEffect(() => {
+    fetch("/api/attendance?teacherId=" + teacher.id)
+      .then(res => res.json())
+      .then(data => setAttendanceRecords(data))
+      .catch(err => console.error("Failed to fetch attendance:", err));
+  }, []);
+
+  // Save attendance to MongoDB whenever it changes
+  useEffect(() => {
+    fetch("/api/attendance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ teacherId: teacher.id, records: attendanceRecords }),
+    }).catch(err => console.error("Failed to save attendance:", err));
+  }, [attendanceRecords]);
+  */
 
   const markAttendance = (status) => {
     setAttendanceRecords((prev) => {
@@ -117,7 +153,7 @@ export default function TeacherAttendance() {
     return (
       <CalendarGrid>
         {days.map((day) => {
-          const dateStr = new Date(now.getFullYear(), now.getMonth(), day).toLocaleDateString();
+          const dateStr = getTodayStr(new Date(now.getFullYear(), now.getMonth(), day));
           const record = attendanceRecords.find((r) => r.date === dateStr);
 
           let bgColor = "#e0e0e0";
@@ -138,7 +174,7 @@ export default function TeacherAttendance() {
   useEffect(() => {
     const todayRecord = attendanceRecords.find((r) => r.date === today);
     setStatusToday(todayRecord?.status || "");
-  }, [attendanceRecords]);
+  }, [attendanceRecords, today]);
 
   return (
     <Container>
